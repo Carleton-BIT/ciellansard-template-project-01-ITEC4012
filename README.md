@@ -25,8 +25,9 @@ I encourage you not to generate image assets used in your application with AI.
 This repository contains a minimal Django project with no apps or models. Build off of this for your first project.
 
 The project is submitted by committing and pushing to the main branch of this repository. Please verify that your
-web application successfully deployed to the production server, as we will be grading what appears on your server
-for polish.
+web application successfully deployed to the production server, as we will be grading what is deployed on your server!
+
+For deployment to work, you must complete [Lab 3 - Automated Deployment](https://portal.carleton.university/c/itec4012/docs/lab-3-automated-deployment/). It's a prerequisite for submitting your project.
 
 ## Setup to run locally
 
