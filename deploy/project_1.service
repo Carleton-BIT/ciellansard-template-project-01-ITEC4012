@@ -46,8 +46,8 @@ Environment=MEDIA_ROOT=/var/lib/project_1/media
 # Replace CHANGE-ME on both lines with your hostname. For example:
 #   Environment=ALLOWED_HOSTS=itec-4012-integral-basilisk.projects.carleton.university
 #   Environment=CSRF_TRUSTED_ORIGINS=https://itec-4012-integral-basilisk.projects.carleton.university
-Environment=ALLOWED_HOSTS=CHANGE-ME
-Environment=CSRF_TRUSTED_ORIGINS=https://CHANGE-ME
+Environment=ALLOWED_HOSTS=itec4012-major-bonefish.projects.carleton.university
+Environment=CSRF_TRUSTED_ORIGINS=https://itec4012-major-bonefish.projects.carleton.university
 
 # The secret key is kept out of this file (and out of GitHub). deploy.sh generates the secret key on the production server
 # and saves it in /etc/project_1/env. This line loads that file and sets the SECRET_KEY environment variable.
