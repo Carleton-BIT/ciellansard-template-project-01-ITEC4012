@@ -6,7 +6,7 @@
 Description=Project 1 (Django served by gunicorn)
 
 # This means that if the computer is booting and the network is currently setting up,
-# you should wait until that's done to run this server (makes sense!)
+# you should wait until that's done to run this service (makes sense!)
 After=network.target
 
 # [Service] contains detailed instructions on how linux should run the service
