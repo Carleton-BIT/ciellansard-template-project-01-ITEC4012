@@ -22,6 +22,6 @@ from django.urls import path
 urlpatterns = [
     # It's not a good Django practice to return HTML in urls.py, but I have the line below so that you can easily
     # test that your deployment is working
-    path('', lambda request: HttpResponse("It's working!")),
+    path('', lambda request: HttpResponse("To-do: add templates")),
     path('admin/', admin.site.urls),
 ]
