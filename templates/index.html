@@ -5,6 +5,14 @@
     <title>Title</title>
 </head>
 <body>
-    <p>{{ response }}</p>
+    <p>Title (Year): {{ title }} ({{ year }})</p>
+    <p>ID: {{ id }}</p>
+    <p>Keywords: {{ keywords }}</p>
+    <p>Genres: {{ genres }}</p>
+    <p>Rating: {{ rating }}/10 ({{ votes }} votes)</p>
+    <p>Length: {{ length }} min.</p>
+    <p>Link: <a href="{{ link }}">{{ link }}</a></p>
+    <img src="https://image.tmdb.org/t/p/w1280/{{ poster_path }}" style="height: 200px;">
+    <p>Info: {{ info }}</p>
 </body>
 </html>
