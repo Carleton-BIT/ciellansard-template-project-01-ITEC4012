@@ -5,14 +5,17 @@
     <title>Title</title>
 </head>
 <body>
-    <p>Title (Year): {{ title }} ({{ year }})</p>
-    <p>ID: {{ id }}</p>
-    <p>Keywords: {{ keywords }}</p>
-    <p>Genres: {{ genres }}</p>
-    <p>Rating: {{ rating }}/10 ({{ votes }} votes)</p>
-    <p>Length: {{ length }} min.</p>
-    <p>Link: <a href="{{ link }}">{{ link }}</a></p>
-    <img src="https://image.tmdb.org/t/p/w1280/{{ poster_path }}" style="height: 200px;">
-    <p>Info: {{ info }}</p>
+    {% for movie in movies %}
+        <p>Title (Year): {{ movie.title }} ({{ movie.year }})</p>
+        <p>ID: {{ movie.tmdb_id }}</p>
+        <!--    <p>Keywords: {{ movie.keywords }}</p>-->
+        <!--    <p>Genres: {{ movie.genres }}</p>-->
+        <p>Rating: {{ movie.rating }}/10 ({{ movie.votes }} votes)</p>
+        <p>Length: {{ movie.length }} min.</p>
+        <p>Link: <a href="{{ movie.tmdb_link }}">{{ movie.tmdb_link }}</a></p>
+        <img src="https://image.tmdb.org/t/p/w1280/{{ movie.poster_path }}" style="height: 200px;">
+        <!--    <p>Info: {{ info }}</p>-->
+        <hr>
+    {% endfor %}
 </body>
 </html>
