@@ -11,6 +11,10 @@ import tmdbsimple as tmdb
 tmdb.API_KEY = env('TMDB_API_KEY')
 
 def index(request):
-    response = tmdb.Movies(603).keywords()
+    responseA = str(tmdb.Search().movie(query="Parasite", year=2019))
+    responseA = responseA.split("'id': ")[1]
+    responseA = responseA.split(", 'title'")[0]
+
+    response = tmdb.Movies(responseA).keywords()
 
     return TemplateResponse(request, "index.html", {'response':response})
