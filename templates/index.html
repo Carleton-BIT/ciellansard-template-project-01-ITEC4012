@@ -17,5 +17,10 @@
         <!--    <p>Info: {{ info }}</p>-->
         <hr>
     {% endfor %}
+<hr>
+<hr>
+    {% for keyword in keywords %}
+        <p>{{ keyword.id }}, {{ keyword.keyword_name }}</p>
+    {% endfor %}
 </body>
 </html>
