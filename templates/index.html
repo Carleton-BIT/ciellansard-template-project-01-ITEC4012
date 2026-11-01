@@ -7,10 +7,15 @@
 <body>
     {% for movie in movies %}
         <p>Title (Year): {{ movie.title }} ({{ movie.year }})</p>
-        <p>ID: {{ movie.tmdb_id }}</p>
-        <!--    <p>Keywords: {{ movie.keywords }}</p>-->
+        <p>ID: {{ movie.id }}</p>
+        <p>Keywords:
+            {% for keyword in movie.keywords.all %}
+                [{{ keyword.id }} | {{ keyword.keyword_name }}]
+            {% endfor %}
+        </p>
         <!--    <p>Genres: {{ movie.genres }}</p>-->
-        <p>Rating: {{ movie.rating }}/10 ({{ movie.votes }} votes)</p>
+        <p>Audience rating: {{ movie.audience_rating }}/10 ({{ movie.votes }} votes)</p>
+        <p>Your rating: {{ movie.user_rating }}/5</p>
         <p>Length: {{ movie.length }} min.</p>
         <p>Link: <a href="{{ movie.tmdb_link }}">{{ movie.tmdb_link }}</a></p>
         <img src="https://image.tmdb.org/t/p/w1280/{{ movie.poster_path }}" style="height: 200px;">
@@ -19,8 +24,11 @@
     {% endfor %}
 <hr>
 <hr>
-    {% for keyword in keywords %}
-        <p>{{ keyword.id }}, {{ keyword.keyword_name }}</p>
-    {% endfor %}
+<!--    {% for keyword in keywords %}-->
+<!--        <p>{{ keyword.id }}, {{ keyword.keyword_name }}</p>-->
+<!--    {% endfor %}-->
+<!--{% for title, year in list %}-->
+<!--    <p>[{{ title }} | {{ year }}]</p>-->
+<!--{% endfor %}-->
 </body>
 </html>

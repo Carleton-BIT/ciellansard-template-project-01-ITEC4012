@@ -6,7 +6,8 @@ class Keyword(models.Model):
 
     @classmethod
     def create(cls, keyword_id, keyword_name):
-        Keyword.objects.filter(id=keyword_id).delete()
+        if Keyword.objects.filter(id=keyword_id).exists():
+            return None
         keyword = cls(
             id = keyword_id,
             #keyword_id=keyword_id,
@@ -26,15 +27,17 @@ class Movie(models.Model):
     #tmdb_id = models.IntegerField()
     keywords = models.ManyToManyField(Keyword, related_name='movies')
     #genres = models.ManyToManyField(Genre)
-    rating = models.FloatField()
+    audience_rating = models.FloatField()
+    user_rating = models.FloatField()
     votes = models.IntegerField()
     length = models.IntegerField()
     tmdb_link = models.CharField(max_length=100)
     poster_path = models.CharField(max_length=100)
 
     @classmethod
-    def create(cls, title, year, tmdb_id, rating, votes, length, tmdb_link, poster_path):
-        Movie.objects.filter(title=title, year=year).delete()
+    def create(cls, title, year, tmdb_id, audience_rating, user_rating, votes, length, tmdb_link, poster_path):
+        if Movie.objects.filter(id=tmdb_id).exists():
+            return None
         movie = cls(
             title=title,
             year=year,
@@ -42,7 +45,8 @@ class Movie(models.Model):
             #tmdb_id=tmdb_id,
             # genres=genres,
             #keywords=Keyword.create(keyword_id=0, keyword_name=""),
-            rating=rating,
+            audience_rating=audience_rating,
+            user_rating=user_rating,
             votes=votes,
             length=length,
             tmdb_link=tmdb_link,
