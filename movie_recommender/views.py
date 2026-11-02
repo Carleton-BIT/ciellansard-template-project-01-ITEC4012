@@ -8,10 +8,11 @@ from django.template.response import TemplateResponse
 
 
 from movie_recommender.models import Movie, Keyword
-from project_1.settings import env, TMDB_API_KEY, TMDB_BEARER_TOKEN
+from project_1.settings import env, os, MEDIA_ROOT, TMDB_API_KEY, TMDB_BEARER_TOKEN
 import tmdbsimple as tmdb
 from .utils import get_and_save_movies_matching_keywords, get_data_from_submitted_file, add_movie_if_new
 import random
+from .forms import FileUploadForm
 
 tmdb.API_KEY = env('TMDB_API_KEY')
 
@@ -58,7 +59,7 @@ def index(request):
             for keyword in new_keywords:
                 if keyword not in all_keywords:
                     all_keywords.append(keyword)
-                    all_keyword_weights.append(w + 1.0)
+                    all_keyword_weights.append(w)
                 else:
                     all_keyword_weights[all_keywords.index(keyword)] += w
 
@@ -102,3 +103,49 @@ def index(request):
         'keywords': zip(keywords, keyword_weights),
         'results' : results_to_show
     })
+
+
+# Based on https://medium.com/@brahim_idbendriss/how-to-upload-and-store-a-file-using-htmx-in-a-django-project-9e82cf3bb4b8
+def file_submission(request):
+    titles = [
+        "Upload your Letterboxd ratings",
+        "Star threshold"
+        "Keyword weight modifier"
+        "Number of keywords to search"
+        "Maximum number of recommendations"
+    ]
+    subtitles = [
+        "Not sure how? On Letterboxd, go to Settings > Data > Export Your Data, unzip the folder it produces, and upload 'ratings.csv' here.",
+        "Base recommendations on movies with this many stars or more. Default is 3.0"
+        "Raise this value to favour keywords from your highest-rated movies, lower it to give all keywords a fairer chance. Default = 1.0"
+        "More keywords generates stronger and more varied recommendations, but has a large impact on loading time. Default = 5"
+        "Recommend this many movies (or fewer, if not enough are found.) Default = 10"
+    ]
+    if request.method == 'POST':
+        form = FileUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Make sure new file is valid
+            uploaded_file = form.cleaned_data['upload_your_letterboxd_ratings']
+            if uploaded_file.content_type != 'text/csv': # check formatting?
+                return render(request, 'file_submission.html',{'form': form, 'error_message': 'Uploaded file must be .csv'})
+
+            # Delete old uploaded files
+            upload_dir = os.path.join(MEDIA_ROOT, 'uploads')
+            for file in os.listdir(upload_dir):
+                os.remove(os.path.join(upload_dir, file))
+
+            # Save new file to uploads directory
+            os.makedirs(upload_dir, exist_ok=True)
+            file_path = os.path.join(upload_dir, str(uploaded_file.name))
+            with open(file_path, 'wb+') as destination:
+                for chunk in uploaded_file.chunks():
+                    destination.write(chunk)
+
+            return render(request, 'file_submission.html', {
+                'form': zip(FileUploadForm(), titles, subtitles),
+                'success_message': 'File uploaded successfully'
+            })
+    else:
+        form = FileUploadForm()
+
+    return TemplateResponse(request, "file_submission.html", {'form': form})
