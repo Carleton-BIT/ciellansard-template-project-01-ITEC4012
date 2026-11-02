@@ -65,9 +65,8 @@ def get_and_save_movies_matching_keywords(keywords_to_search):
             except IndexError:
                 continue
 
-            # add match quality
-
-            new_movie = add_movie_if_new(movie_id, movie_title, movie_year, str((len(results) - results.index(result)) * 100))
+            new_movie = add_movie_if_new(movie_id, movie_title, movie_year, 0.0)
+            Movie.objects.filter(id=movie_id).update(match_strength=len(results) - results.index(result))
 
             if new_movie is not None:
                 movies.append(new_movie)

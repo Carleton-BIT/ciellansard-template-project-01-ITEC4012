@@ -82,9 +82,23 @@ def index(request):
 
     results = get_and_save_movies_matching_keywords(keywords_to_search)
 
+    num_results_to_pick = 10
+
+    results.sort(key=lambda x: x.match_strength, reverse=True)
+
+    results_to_show = []
+
+    for result in results:
+        if num_results_to_pick == 0:
+            break
+        if result not in movies and result not in results_to_show:
+            results_to_show.append(result)
+            num_results_to_pick -= 1
+
+
     return TemplateResponse(request, "index.html", {
         'movies': movies,
         'keywords_to_search': selected_keywords,
         'keywords': zip(keywords, keyword_weights),
-        'results' : results
+        'results' : results_to_show
     })

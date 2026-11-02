@@ -33,6 +33,7 @@ class Movie(models.Model):
     length = models.IntegerField()
     tmdb_link = models.CharField(max_length=100)
     poster_path = models.CharField(max_length=100)
+    match_strength = models.FloatField(default=0.0)
 
     @classmethod
     def create(cls, title, year, tmdb_id, audience_rating, user_rating, votes, length, tmdb_link, poster_path):

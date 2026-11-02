@@ -39,9 +39,9 @@
         </p>
         <!--    <p>Genres: {{ movie.genres }}</p>-->
         <p>Audience rating: {{ result.audience_rating }}/10 ({{ result.votes }} votes)</p>
-        <p>Your rating: {{ result.user_rating }}/5</p>
+        <p>Match weight: {{ result.match_strength }}/5</p>
         <p>Length: {{ result.length }} min.</p>
-        <p>Link: <a href="{{ movie.tmdb_link }}">{{ result.tmdb_link }}</a></p>
+        <p>Link: <a href="{{ result.tmdb_link }}">{{ result.tmdb_link }}</a></p>
         <img src="https://image.tmdb.org/t/p/w1280/{{ result.poster_path }}" style="height: 200px;">
         <!--    <p>Info: {{ info }}</p>-->
         <hr>
