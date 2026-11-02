@@ -11,12 +11,36 @@
 </head>
 <body>
     <div id="sideBar">
-        <form method="post" enctype="multipart/form-data" hx-post="{% url 'file_submission' %}" >
+        <form method="post" enctype="multipart/form-data" hx-post="{% url 'index' %}" >
             {% csrf_token %}
             {{ form }}
             <button type="submit" id="submitButton">Get Recommendations</button>
         </form>
     </div>
-
+    <div>
+        {% for keyword in keywords_to_search %}
+            <p>{{ keyword.id }}, {{ keyword.keyword_name }}</p>
+        {% endfor %}
+        <hr>
+        <hr>
+        <hr>
+        {% for result in results %}
+            <p>Title (Year): {{ result.title }} ({{ result.year }})</p>
+            <p>ID: {{ result.id }}</p>
+            <p>Keywords:
+                {% for keyword in result.keywords.all %}
+                    [{{ keyword.id }} | {{ keyword.keyword_name }}]
+                {% endfor %}
+            </p>
+            <!--    <p>Genres: {{ movie.genres }}</p>-->
+            <p>Audience rating: {{ result.audience_rating }}/10 ({{ result.votes }} votes)</p>
+            <p>Match weight: {{ result.match_strength }}/5</p>
+            <p>Length: {{ result.length }} min.</p>
+            <p>Link: <a href="{{ result.tmdb_link }}">{{ result.tmdb_link }}</a></p>
+            <img src="https://image.tmdb.org/t/p/w1280/{{ result.poster_path }}" style="height: 200px;">
+            <!--    <p>Info: {{ info }}</p>-->
+            <hr>
+        {% endfor %}
+    </div>
 </body>
 </html>

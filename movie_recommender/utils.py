@@ -1,3 +1,5 @@
+import os
+
 import requests, csv
 from project_1.settings import env, TMDB_API_KEY, TMDB_BEARER_TOKEN
 from movie_recommender.models import Movie, Keyword
@@ -93,7 +95,7 @@ def get_data_from_submitted_file():
     years = []
     ratings = []
 
-    with (open(env('CSV_PATH'), "r") as file):
+    with (open("./media/uploads/" + os.listdir("./media/uploads")[0], "r") as file):
         data = csv.reader(file)
         row_idx = 0
         for row in data:
