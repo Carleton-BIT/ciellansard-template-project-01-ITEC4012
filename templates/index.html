@@ -5,28 +5,29 @@
     <title>Title</title>
 </head>
 <body>
-    {% for movie in movies %}
-        <p>Title (Year): {{ movie.title }} ({{ movie.year }})</p>
-        <p>ID: {{ movie.id }}</p>
-        <p>Keywords:
-            {% for keyword in movie.keywords.all %}
-                [{{ keyword.id }} | {{ keyword.keyword_name }}]
-            {% endfor %}
-        </p>
-        <!--    <p>Genres: {{ movie.genres }}</p>-->
-        <p>Audience rating: {{ movie.audience_rating }}/10 ({{ movie.votes }} votes)</p>
-        <p>Your rating: {{ movie.user_rating }}/5</p>
-        <p>Length: {{ movie.length }} min.</p>
-        <p>Link: <a href="{{ movie.tmdb_link }}">{{ movie.tmdb_link }}</a></p>
-        <img src="https://image.tmdb.org/t/p/w1280/{{ movie.poster_path }}" style="height: 200px;">
-        <!--    <p>Info: {{ info }}</p>-->
-        <hr>
-    {% endfor %}
+<!--    {% for movie in movies %}-->
+<!--        <p>Title (Year): {{ movie.title }} ({{ movie.year }})</p>-->
+<!--        <p>ID: {{ movie.id }}</p>-->
+<!--        <p>Keywords:-->
+<!--            {% for keyword in movie.keywords.all %}-->
+<!--                [{{ keyword.id }} | {{ keyword.keyword_name }}]-->
+<!--            {% endfor %}-->
+<!--        </p>-->
+<!--        &lt;!&ndash;    <p>Genres: {{ movie.genres }}</p>&ndash;&gt;-->
+<!--        <p>Audience rating: {{ movie.audience_rating }}/10 ({{ movie.votes }} votes)</p>-->
+<!--        <p>Your rating: {{ movie.user_rating }}/5</p>-->
+<!--        <p>Length: {{ movie.length }} min.</p>-->
+<!--        <p>Link: <a href="{{ movie.tmdb_link }}">{{ movie.tmdb_link }}</a></p>-->
+<!--        <img src="https://image.tmdb.org/t/p/w1280/{{ movie.poster_path }}" style="height: 200px;">-->
+<!--        &lt;!&ndash;    <p>Info: {{ info }}</p>&ndash;&gt;-->
+<!--        <hr>-->
+<!--    {% endfor %}-->
 <hr>
 <hr>
     {% for keyword in keywords %}
-        <p>{{ keyword.id }}, {{ keyword.keyword_name }}</p>
+        <p>{{ keyword.0.id }}, {{ keyword.0.keyword_name }} | {{ keyword.1 }}</p>
     {% endfor %}
+
 {% for title, year in list %}
     <p>[{{ title }} | {{ year }}]</p>
 {% endfor %}

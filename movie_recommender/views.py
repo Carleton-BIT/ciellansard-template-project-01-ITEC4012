@@ -16,7 +16,7 @@ tmdb.API_KEY = env('TMDB_API_KEY')
 
 def index(request):
 
-    mvs = []
+    movies = []
 
     keywords_to_search = ["3335", "1576", "4344"]
 
@@ -37,10 +37,39 @@ def index(request):
         new_movie = add_movie_if_new(movie_id, movie_title, movie_year, ratings[title_idx], title_idx)
 
         if new_movie is not None:
-            mvs.append(new_movie)
+            movies.append(new_movie)
 
+
+    all_keywords = []
+    all_keyword_weights = []
+
+    keywords = []
+    keyword_weights = []
+
+    positivity_threshold = 3.0 # Any movie rated higher than this is 'good'; de-value keywords from lower-rated movies
+    weight_modifier = 1.0 # Lower = less bias, higher = bias towards favourite keywords
+
+    for movie in movies:
+        m = Movie.objects.filter(id=movie.id).first()
+        if m is not None:
+            new_keywords = m.keywords.all()
+
+            w = (float(m.user_rating) - positivity_threshold) * weight_modifier
+
+            for keyword in new_keywords:
+                if keyword not in all_keywords:
+                    all_keywords.append(keyword)
+                    all_keyword_weights.append(w + 1.0)
+                else:
+                    all_keyword_weights[all_keywords.index(keyword)] += w
+
+    for keyword in all_keywords:
+        if all_keyword_weights[all_keywords.index(keyword)] > 0:
+            keywords.append(keyword)
+            keyword_weights.append(all_keyword_weights[all_keywords.index(keyword)])
 
     return TemplateResponse(request, "index.html", {
-        'movies': mvs,
+        'movies': movies,
+        'keywords': zip(keywords, keyword_weights),
         'results' : get_movies_matching_keywords(["1"])#(keywords_to_search)
     })
