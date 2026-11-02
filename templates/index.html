@@ -31,6 +31,9 @@
 <!--    <p>[{{ title }} | {{ year }}]</p>-->
 <!--{% endfor %}-->
 
-<p>{{ results }}</p>
+{% for result in results %}
+    <p>{{ result }}</p>
+    <hr>
+{% endfor %}
 </body>
 </html>

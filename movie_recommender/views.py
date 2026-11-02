@@ -23,15 +23,36 @@ def index(request):
     # kws = []
     rts = []
 
-    keywords_to_search = ["2187", "295702"]
+    keywords_to_search = ["2187", "295702", "8570", "1395", "5600", "206298"]
+    num_keywords = len(keywords_to_search)
+    results = [""]
 
-    rt = requests.get(
+    # Search for movies that meet ALL keywords
+    results[0] = requests.get(
         f'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=vote_count.desc&api_key={TMDB_API_KEY}&with_keywords={",".join(keywords_to_search)}',
         headers={
-            'Authorization' : f'Bearer {TMDB_BEARER_TOKEN}',
-            #'accept': 'application/json'
+            'Authorization' : f'Bearer {TMDB_BEARER_TOKEN}'
         }
     ).json()
+
+    # Then, search for movies that meet n - 1, n - 2 ... 1 keywords
+    for i in reversed(range(1, num_keywords)):
+        results.append("")
+        
+        for j in range(num_keywords):
+            keyword_subset = []
+
+            for k in range(i):
+                keyword_subset.append(keywords_to_search[(k + j)%(i + 1)])
+
+            result_subset = requests.get(
+                                f'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=vote_count.desc&api_key={TMDB_API_KEY}&with_keywords={",".join(keyword_subset)}',
+                                headers={
+                                    'Authorization': f'Bearer {TMDB_BEARER_TOKEN}'
+                                }
+                            ).json()
+
+            results[num_keywords - i] += str(result_subset)
 
     # with open(env('CSV_PATH'), "r") as file:
     #     data = csv.reader(file)
@@ -110,5 +131,5 @@ def index(request):
         'movies': mvs,
         # 'keywords': kws,
         # 'list' : zip(titles, years)
-        'results' : rt
+        'results' : results
     })
