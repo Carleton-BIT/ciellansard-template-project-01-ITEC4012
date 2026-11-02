@@ -5,6 +5,12 @@
     <title>Title</title>
 </head>
 <body>
+    {% for keyword in keywords_to_search %}
+        <p>{{ keyword.id }}, {{ keyword.keyword_name }}</p>
+    {% endfor %}
+    <hr>
+    <hr>
+    <hr>
 <!--    {% for movie in movies %}-->
 <!--        <p>Title (Year): {{ movie.title }} ({{ movie.year }})</p>-->
 <!--        <p>ID: {{ movie.id }}</p>-->
@@ -22,19 +28,16 @@
 <!--        &lt;!&ndash;    <p>Info: {{ info }}</p>&ndash;&gt;-->
 <!--        <hr>-->
 <!--    {% endfor %}-->
-<hr>
-<hr>
-    {% for keyword in keywords %}
-        <p>{{ keyword.0.id }}, {{ keyword.0.keyword_name }} | {{ keyword.1 }}</p>
-    {% endfor %}
-
-{% for title, year in list %}
-    <p>[{{ title }} | {{ year }}]</p>
-{% endfor %}
 
 {% for result in results %}
     <p>{{ result }}</p>
     <hr>
 {% endfor %}
+
+    <hr>
+<hr>
+<!--    {% for keyword in keywords %}-->
+<!--        <p>{{ keyword.0.id }}, {{ keyword.0.keyword_name }} | {{ keyword.1 }}</p>-->
+<!--    {% endfor %}-->
 </body>
 </html>
