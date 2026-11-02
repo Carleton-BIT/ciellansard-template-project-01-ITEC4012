@@ -50,7 +50,7 @@ class Movie(models.Model):
             votes=votes,
             length=length,
             tmdb_link=tmdb_link,
-            poster_path=poster_path
+            poster_path=poster_path if poster_path is not None else "",
         )
         return movie
 

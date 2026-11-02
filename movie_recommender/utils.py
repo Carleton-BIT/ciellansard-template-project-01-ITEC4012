@@ -6,7 +6,7 @@ import tmdbsimple as tmdb
 
 
 # Given a list of keywords, find the most voted movies with n, n-1, n-2 ... 1 matching keywords
-def get_movies_matching_keywords(keywords_to_search):
+def get_and_save_movies_matching_keywords(keywords_to_search):
     num_keywords = len(keywords_to_search)
     results = [""]
 
@@ -37,7 +37,44 @@ def get_movies_matching_keywords(keywords_to_search):
 
             results[num_keywords - i] += str(result_subset)
 
-    return results
+
+    movies = []
+
+    for result in results:
+        result = str(result)
+
+        num_movies = result.count('\'id\': ')
+        if num_movies == 0 or result.count('\'title\': \'') < 1 or result.count('\'release_date\': \'') < 1 or result.count('\'release_date\': \'') < 1:
+            continue
+
+        movie_idx = 0
+
+        for i in range(num_movies):
+            movie_id = ""
+            movie_title = ""
+            movie_year = ""
+            try:
+                movie_id = result.split('\'id\': ')[movie_idx + 1]
+                movie_id = movie_id.split(',')[0]
+
+                movie_title = result.split('\'title\': \'')[movie_idx + 1]
+                movie_title = movie_title.split('\',')[0]
+
+                movie_year = result.split('\'release_date\': \'')[movie_idx + 1]
+                movie_year = movie_year.split('-')[0]
+            except IndexError:
+                continue
+
+            # add match quality
+
+            new_movie = add_movie_if_new(movie_id, movie_title, movie_year, str((len(results) - results.index(result)) * 100))
+
+            if new_movie is not None:
+                movies.append(new_movie)
+
+            movie_idx += 1
+
+    return movies
 
 
 
@@ -93,7 +130,12 @@ def get_and_save_movie_keywords(movie):
 
         if movie_keywords.count('\'name\': \'') == 0:
             break
-        keyword_name = movie_keywords.split('\'name\': \'')[i]
+
+        keyword_name = ""
+        try:
+            keyword_name = movie_keywords.split('\'name\': \'')[i]
+        except IndexError:
+            continue
         keyword_name = keyword_name.split('\'')[0]
 
         keywords.append(keyword_id)
@@ -110,7 +152,7 @@ def get_and_save_movie_keywords(movie):
 
 
 # Create a movie and create/set related keywords if a movie at the same id does not exist
-def add_movie_if_new(movie_id, movie_title, movie_year, movie_rating, title_idx):
+def add_movie_if_new(movie_id, movie_title, movie_year, movie_rating):
     if not Movie.objects.filter(id=movie_id).exists():
         movie = tmdb.Movies(movie_id)
         info = movie.info()
@@ -136,5 +178,8 @@ def add_movie_if_new(movie_id, movie_title, movie_year, movie_rating, title_idx)
             keywords = get_and_save_movie_keywords(movie)
             if keywords is not None:
                 Movie.set_keywords(Movie.objects.get(id=movie_id), keywords)
+
+    else:
+        Movie.objects.filter(id=movie_id).update(user_rating=movie_rating)
 
     return Movie.objects.get(id=movie_id)

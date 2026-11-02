@@ -10,7 +10,7 @@ from django.template.response import TemplateResponse
 from movie_recommender.models import Movie, Keyword
 from project_1.settings import env, TMDB_API_KEY, TMDB_BEARER_TOKEN
 import tmdbsimple as tmdb
-from .utils import get_movies_matching_keywords, get_data_from_submitted_file, add_movie_if_new
+from .utils import get_and_save_movies_matching_keywords, get_data_from_submitted_file, add_movie_if_new
 import random
 
 tmdb.API_KEY = env('TMDB_API_KEY')
@@ -33,7 +33,7 @@ def index(request):
         movie_id = movie_id.split("'id': ")[1]
         movie_id = movie_id.split(", 'title'")[0]
 
-        new_movie = add_movie_if_new(movie_id, movie_title, movie_year, ratings[title_idx], title_idx)
+        new_movie = add_movie_if_new(movie_id, movie_title, movie_year, ratings[title_idx])
 
         if new_movie is not None:
             movies.append(new_movie)
@@ -80,9 +80,11 @@ def index(request):
         keywords_to_search.append(str(keyword.id))
 
 
+    results = get_and_save_movies_matching_keywords(keywords_to_search)
+
     return TemplateResponse(request, "index.html", {
         'movies': movies,
         'keywords_to_search': selected_keywords,
         'keywords': zip(keywords, keyword_weights),
-        'results' : get_movies_matching_keywords(keywords_to_search)
+        'results' : results
     })

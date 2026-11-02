@@ -29,10 +29,33 @@
 <!--        <hr>-->
 <!--    {% endfor %}-->
 
-{% for result in results %}
-    <p>{{ result }}</p>
-    <hr>
-{% endfor %}
+        {% for result in results %}
+        <p>Title (Year): {{ result.title }} ({{ result.year }})</p>
+        <p>ID: {{ result.id }}</p>
+        <p>Keywords:
+            {% for keyword in result.keywords.all %}
+                [{{ keyword.id }} | {{ keyword.keyword_name }}]
+            {% endfor %}
+        </p>
+        <!--    <p>Genres: {{ movie.genres }}</p>-->
+        <p>Audience rating: {{ result.audience_rating }}/10 ({{ result.votes }} votes)</p>
+        <p>Your rating: {{ result.user_rating }}/5</p>
+        <p>Length: {{ result.length }} min.</p>
+        <p>Link: <a href="{{ movie.tmdb_link }}">{{ result.tmdb_link }}</a></p>
+        <img src="https://image.tmdb.org/t/p/w1280/{{ result.poster_path }}" style="height: 200px;">
+        <!--    <p>Info: {{ info }}</p>-->
+        <hr>
+    {% endfor %}
+
+
+
+
+
+
+<!--{% for result in results %}-->
+<!--    <p>{{ result }}</p>-->
+<!--    <hr>-->
+<!--{% endfor %}-->
 
     <hr>
 <hr>
