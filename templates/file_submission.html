@@ -5,14 +5,18 @@
     <title>Title</title>
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="sideBar">
         <form method="post" enctype="multipart/form-data" hx-post="{% url 'file_submission' %}" >
             {% csrf_token %}
             {{ form }}
-            <button type="submit">Get Recommendations</button>
+            <button type="submit" id="submitButton">Get Recommendations</button>
         </form>
     </div>
+
 </body>
 </html>

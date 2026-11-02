@@ -1,0 +1,50 @@
+body {
+   background-image: url("https://s.ltrbxd.com/static/img/content-bg-CFRqxbz-.png");
+   background-size: 100vw 100vh;
+   padding: 0;
+   margin: 0;
+}
+
+body, input, button {
+   font-family: "Montserrat", sans-serif;
+   font-optical-sizing: auto;
+   font-weight: 400;
+   font-style: normal;
+   color: #d6dee8;
+}
+
+#sideBar {
+   background-color: #14181c;
+   width: 30vw;
+   padding: 10px;
+   box-sizing: border-box;
+   height: 100vh;
+   align-content: center;
+   box-shadow: black -10px 0 20px;
+}
+
+.helptext {
+   font-size: 10px;
+   font-style: italic;
+}
+
+label, #submitButton {
+   font-weight: 500;
+}
+
+input, button, #fileUploadButton {
+   margin-bottom: 15px;
+   margin-top: 5px;
+   background: #456;
+   border: 1px solid #515a68;
+   border-radius: 2px;
+   width: 100%;
+   color: #fff;
+   padding: 2px;
+}
+
+#submitButton {
+   background: #009318;
+   padding: 5px;
+   border: 1px solid #00E054;
+}
