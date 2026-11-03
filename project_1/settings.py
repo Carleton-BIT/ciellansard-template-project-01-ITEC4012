@@ -29,9 +29,9 @@ environ.Env.read_env(BASE_DIR / '.env')
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: keep this key secret!
-TMDB_API_KEY = env('TMDB_API_KEY')
-
-TMDB_BEARER_TOKEN = env('TMDB_BEARER_TOKEN')
+# TMDB_API_KEY = env('TMDB_API_KEY')
+#
+# TMDB_BEARER_TOKEN = env('TMDB_BEARER_TOKEN')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
