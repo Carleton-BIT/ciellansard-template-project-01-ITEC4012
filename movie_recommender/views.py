@@ -136,7 +136,7 @@ def file_submission(request):
             #
             # Save new file to uploads directory
             #os.makedirs("../media/uploads", exist_ok=True)
-            file_path = os.path.join("../media/uploads", str(uploaded_file.name))
+            # file_path = os.path.join("../media/uploads", str(uploaded_file.name))
 
             with open("../media/uploads", str(uploaded_file.name)) as csv_file:
                 for chunk in uploaded_file.chunks():
