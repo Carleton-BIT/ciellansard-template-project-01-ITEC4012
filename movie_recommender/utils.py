@@ -1,3 +1,5 @@
+import os
+
 import requests, csv
 from project_1.settings import env, TMDB_API_KEY, TMDB_BEARER_TOKEN
 from movie_recommender.models import Movie, Keyword
@@ -47,9 +49,10 @@ def get_and_save_movies_matching_keywords(keywords_to_search):
         if num_movies == 0 or result.count('\'title\': \'') < 1 or result.count('\'release_date\': \'') < 1 or result.count('\'release_date\': \'') < 1:
             continue
 
-        movie_idx = 0
+        movie_idx = -1
 
         for i in range(num_movies):
+            movie_idx += 1
             movie_id = ""
             movie_title = ""
             movie_year = ""
@@ -65,13 +68,14 @@ def get_and_save_movies_matching_keywords(keywords_to_search):
             except IndexError:
                 continue
 
+            if not movie_year.isnumeric():
+                continue
+
             new_movie = add_movie_if_new(movie_id, movie_title, movie_year, 0.0)
             Movie.objects.filter(id=movie_id).update(match_strength=len(results) - results.index(result))
 
             if new_movie is not None:
                 movies.append(new_movie)
-
-            movie_idx += 1
 
     return movies
 
@@ -93,7 +97,7 @@ def get_data_from_submitted_file():
     years = []
     ratings = []
 
-    with (open(env('CSV_PATH'), "r") as file):
+    with (open("./media/uploads/" + os.listdir("./media/uploads")[0], "r") as file):
         data = csv.reader(file)
         row_idx = 0
         for row in data:
@@ -156,12 +160,16 @@ def add_movie_if_new(movie_id, movie_title, movie_year, movie_rating):
         movie = tmdb.Movies(movie_id)
         info = movie.info()
 
+
+        correct_title = info['title']
+        correct_year = int(info['release_date'][:4])
+
         # movie_genres = movie.info()['genres']
         # movie_link_letterboxd = f'https://letterboxd.com/film/{movie_title}{"-" + movie_year}/'
 
         new_movie = Movie.create(
-            title=movie_title,
-            year=movie_year,
+            title=correct_title,
+            year=correct_year,
             tmdb_id=movie_id,
             # genres=movie_genres,
             audience_rating=round(movie.info()['vote_average'], 1),

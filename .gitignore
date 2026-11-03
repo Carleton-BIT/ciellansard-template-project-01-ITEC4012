@@ -11,8 +11,10 @@ venv/
 db.sqlite3
 db.sqlite3-journal
 /staticfiles/
-/media/
+/media/uploads/*
 
 # IDE
 .idea/
 .vscode/
+/static/admin
+/static/django_htmx
