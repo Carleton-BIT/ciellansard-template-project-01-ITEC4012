@@ -129,18 +129,18 @@ def file_submission(request):
             if uploaded_file.content_type != 'text/csv': # check formatting?
                 return render(request, 'file_submission.html',{'form': form, 'error_message': 'Uploaded file must be .csv'})
 
-            # Delete old uploaded files
-            upload_dir = os.path.join(MEDIA_ROOT, 'uploads')
-            for file in os.listdir(upload_dir):
-                os.remove(os.path.join(upload_dir, file))
-
-            # Save new file to uploads directory
-            os.makedirs(upload_dir, exist_ok=True)
-            file_path = os.path.join(upload_dir, str(uploaded_file.name))
-            with open(file_path, 'wb+') as destination:
-                for chunk in uploaded_file.chunks():
-                    destination.write(chunk)
-
+            # # Delete old uploaded files
+            # upload_dir = os.path.join(MEDIA_ROOT, 'uploads')
+            # for file in os.listdir(upload_dir):
+            #     os.remove(os.path.join(upload_dir, file))
+            #
+            # # Save new file to uploads directory
+            # os.makedirs(upload_dir, exist_ok=True)
+            # file_path = os.path.join(upload_dir, str(uploaded_file.name))
+            # with open(file_path, 'wb+') as destination:
+            #     for chunk in uploaded_file.chunks():
+            #         destination.write(chunk)
+            #
             return render(request, 'file_submission.html', {
                 'form': zip(FileUploadForm(), titles, subtitles),
                 'success_message': 'File uploaded successfully'
