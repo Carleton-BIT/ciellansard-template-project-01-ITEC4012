@@ -1,6 +1,6 @@
 # Project 1
 
-This project is a movie recommender that recommends unwatched movies with the same keywords as the user's favourite movies. It looks at the user's Letterboxd ratings, finds these movies and their associated keywords on TMDB, then searches for & presents similar movies. Letterboxd data is given in the form of a .csv file (no API use/web scraping) and the TMDB data is retrieved using the[TMDB API (https://developer.themoviedb.org/docs/getting-started). 
+This project is a movie recommender that recommends unwatched movies with the same keywords as the user's favourite movies. It looks at the user's Letterboxd ratings, finds these movies and their associated keywords on TMDB, then searches for & presents similar movies. Letterboxd data is given in the form of a .csv file (no API use/web scraping) and the TMDB data is retrieved using the TMDB API (https://developer.themoviedb.org/docs/getting-started). 
 
 https://github.com/user-attachments/assets/a5177aa5-d802-48a6-840c-283f8b12b66e
 
