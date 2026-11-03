@@ -16,19 +16,73 @@ body, input, button {
 #sideBar {
    background-color: #14181c;
    width: 30vw;
-   padding: 10px;
+   padding: 20px;
    box-sizing: border-box;
    height: 100vh;
-   align-content: center;
    box-shadow: black -10px 0 20px;
+   float: left;
 }
 
+#recommendationsPanel {
+   padding-right: 20px;
+   box-sizing: border-box;
+   float: right;
+   width: calc(70vw - 20px);
+   height: 100vh;
+   overflow: auto;
+}
+
+h1 {
+   font-size: 18px;
+}
 .helptext {
-   font-size: 10px;
+   font-size: 12px;
    font-style: italic;
 }
 
-label, #submitButton {
+
+a {
+   font-style: normal;
+   text-decoration: none;
+   color: #d6dee8;
+}
+
+
+.keyword, .keywordTiny {
+   background: #209CE4;
+   border: 1px solid #3EB8EE;
+   border-radius: 2px;
+   padding: 5px 10px;
+   box-sizing: border-box;
+   font-style: normal;
+   text-decoration: none;
+   font-size: 20px;
+   color: white;
+   white-space:nowrap;
+   line-height: 1.8;
+}
+
+.keyword:hover, .keywordTiny:hover {
+   background: #3EB8EE;
+   transition: 0.25s;
+}
+
+.keywordTiny, p {
+   font-size: 16px;
+}
+
+.keywordTiny {
+   padding: 2px 5px;
+}
+
+
+
+h2 {
+   font-size: 20px;
+   font-weight: 500;
+}
+
+label, #submitButton, .keyword {
    font-weight: 500;
 }
 
@@ -36,7 +90,7 @@ input, button, #fileUploadButton {
    margin-bottom: 15px;
    margin-top: 5px;
    background: #456;
-   border: 1px solid #515a68;
+   border: 1px solid #5b6471;
    border-radius: 2px;
    width: 100%;
    color: #fff;
@@ -44,7 +98,56 @@ input, button, #fileUploadButton {
 }
 
 #submitButton {
-   background: #009318;
+   background: #00B92E;
    padding: 5px;
    border: 1px solid #00E054;
 }
+
+#submitButton:hover {
+   background: #00E054;
+   transition: 0.25s;
+}
+
+.recommendation {
+   margin-top: 20px;
+   background-color: #14181c;
+   width: 100%;
+   padding: 20px;
+   box-sizing: border-box;
+   border-radius: 2px;
+   box-shadow: black 0 0 10px;
+   border: 1px solid #3EB8EE;
+   a {
+      color: #3EB8EE;
+   }
+   img {
+      display: inline-block;
+      width: 20%;
+      border-radius: 2px;
+      border: 1px solid #5b6471;
+      vertical-align:middle;
+   }
+}
+
+.matchStrength2 {
+   border: 1px solid #00E054;
+   a {
+      color: #00E054;
+   }
+}
+
+.matchStrength1 {
+   border: 1px solid #F69431;
+   a {
+      color: #F69431;
+   }
+}
+
+
+   .info {
+      display: inline-block;
+      margin-left: 10px;
+      width: calc(80% - 20px);
+      padding: 0;
+      vertical-align:middle;
+   }

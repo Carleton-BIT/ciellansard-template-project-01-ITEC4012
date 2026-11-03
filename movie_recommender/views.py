@@ -19,20 +19,6 @@ tmdb.API_KEY = env('TMDB_API_KEY')
 
 # Based on https://medium.com/@brahim_idbendriss/how-to-upload-and-store-a-file-using-htmx-in-a-django-project-9e82cf3bb4b8
 def index(request):
-    titles = [
-        "Upload your Letterboxd ratings",
-        "Star threshold"
-        "Keyword weight modifier"
-        "Number of keywords to search"
-        "Maximum number of recommendations"
-    ]
-    subtitles = [
-        "Not sure how? On Letterboxd, go to Settings > Data > Export Your Data, unzip the folder it produces, and upload 'ratings.csv' here.",
-        "Base recommendations on movies with this many stars or more. Default is 3.0"
-        "Raise this value to favour keywords from your highest-rated movies, lower it to give all keywords a fairer chance. Default = 1.0"
-        "More keywords generates stronger and more varied recommendations, but has a large impact on loading time. Default = 5"
-        "Recommend this many movies (or fewer, if not enough are found.) Default = 10"
-    ]
     if request.method == 'POST':
         form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
