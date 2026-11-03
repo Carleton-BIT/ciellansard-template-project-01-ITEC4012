@@ -127,9 +127,9 @@ def file_submission(request):
         form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
             # Make sure new file is valid
-            uploaded_file = form.cleaned_data['upload_your_letterboxd_ratings']
-            if uploaded_file.content_type != 'text/csv': # check formatting?
-                return render(request, 'file_submission.html',{'form': form, 'error_message': 'Uploaded file must be .csv'})
+            # uploaded_file = form.cleaned_data['upload_your_letterboxd_ratings']
+            # if uploaded_file.content_type != 'text/csv': # check formatting?
+            #     return render(request, 'file_submission.html',{'form': form, 'error_message': 'Uploaded file must be .csv'})
 
             # # Delete old uploaded files
             # upload_dir = os.path.join(MEDIA_ROOT, 'uploads')

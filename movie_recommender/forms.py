@@ -1,9 +1,9 @@
 from django import forms
 
 class FileUploadForm(forms.Form):
-    upload_your_letterboxd_ratings = forms.FileField(
-        help_text="Not sure where to find your ratings? On Letterboxd, go to Settings > Data > Export Your Data, unzip the folder it produces, and look for the 'ratings.csv' file."
-    )
+    # upload_your_letterboxd_ratings = forms.FileField(
+    #     help_text="Not sure where to find your ratings? On Letterboxd, go to Settings > Data > Export Your Data, unzip the folder it produces, and look for the 'ratings.csv' file."
+    # )
     star_threshold = forms.FloatField(
         min_value=0,
         max_value=5,
