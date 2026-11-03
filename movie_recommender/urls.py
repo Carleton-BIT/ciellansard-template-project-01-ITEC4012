@@ -4,6 +4,6 @@ from . import views
 import requests
 
 urlpatterns = [
-    path("", views.file_submission, name="file_submission"),
+    path("", views.file_submission, name="index"),
     #path("", views.index, name="index"),
 ]
