@@ -16,7 +16,7 @@ import environ
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Secrets and per-environment configuration are read from environment
@@ -138,7 +138,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 # this is directory name where collectstatic files command will put your app level static files
-STATIC_ROOT = '..../etc/project_1/app/writeablestaticfiles/'
+STATIC_ROOT = '../../etc/project_1/app/writeablestaticfiles/'
 
 # this is directory paths where you have to put your project level static files
 # you can put multiple folders here
