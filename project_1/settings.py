@@ -133,18 +133,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
-# this defines the url for static files
-# eg: base-url.com/static/your-js-file.js
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 
-# this is directory name where collectstatic files command will put your app level static files
-STATIC_ROOT = 'static'
-
-# this is directory paths where you have to put your project level static files
-# you can put multiple folders here
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "staticfiles"),
-)
+STATIC_ROOT = env.path('STATIC_ROOT', default=BASE_DIR / 'staticfiles')
 
 # Media files (uploaded by users)
 
@@ -162,10 +153,6 @@ STORAGES = {
     },
 }
 
-STATICFILES_FINDERS = [
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-]
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
