@@ -24,12 +24,14 @@ def index(request):
         if form.is_valid():
             # Make sure new file is valid
             uploaded_file = form.cleaned_data['upload_your_letterboxd_ratings']
-            if uploaded_file.content_type != 'text/csv': # check formatting?
-                return render(request, 'file_submission.html',{'form': form, 'error_message': 'Uploaded file must be .csv'})
+            if uploaded_file.content_type != 'text/csv':
+                return render(request, 'index.html',{
+                    'form': form,
+                    'header': 'Uploaded file must be .csv'
+                })
 
             # Delete old uploaded files
             upload_dir = os.path.join(MEDIA_ROOT, 'uploads')
-
             for file in os.listdir(upload_dir):
                 os.remove(os.path.join(upload_dir, file))
 
@@ -116,15 +118,16 @@ def index(request):
                     results_to_show.append(result)
                     num_results_to_pick -= 1
 
-            return TemplateResponse(request, 'file_submission.html', {
+            return TemplateResponse(request, 'index.html', {
                 'form': form,
                 'success_message': 'File uploaded successfully',
                 'movies': movies,
                 'keywords_to_search': selected_keywords,
                 'keywords': zip(keywords, keyword_weights),
-                'results': results_to_show
+                'results': results_to_show,
+                'header': "Based on your Letterboxd ratings, you might be interested in movies related to..."
             })
     else:
         form = FileUploadForm()
 
-    return TemplateResponse(request, "file_submission.html", {'form': form})
+    return TemplateResponse(request, "index.html", {'form': form, 'header': "Upload your Letterboxd ratings to get started!"})
