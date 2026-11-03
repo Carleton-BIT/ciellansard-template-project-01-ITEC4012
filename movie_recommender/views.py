@@ -137,9 +137,10 @@ def file_submission(request):
             # Save new file to uploads directory
             #os.makedirs("../media/uploads", exist_ok=True)
             file_path = os.path.join("../media/uploads", str(uploaded_file.name))
-            with open(file_path, 'wb+') as destination:
+
+            with open("../media/uploads", str(uploaded_file.name)) as csv_file:
                 for chunk in uploaded_file.chunks():
-                    destination.write(chunk)
+                    csv_file.write(chunk)
 
             return render(request, 'file_submission.html', {
                 'form': zip(FileUploadForm(), titles, subtitles),
