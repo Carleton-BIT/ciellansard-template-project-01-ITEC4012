@@ -16,7 +16,7 @@ import environ
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = ""
+BASE_DIR = "etc/"
 
 
 # Secrets and per-environment configuration are read from environment
