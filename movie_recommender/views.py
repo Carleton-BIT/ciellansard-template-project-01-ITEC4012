@@ -16,19 +16,118 @@ from .forms import FileUploadForm
 
 tmdb.API_KEY = env('TMDB_API_KEY')
 
+def index(request):
+
+    movies = []
+
+    titles, years, ratings = get_data_from_submitted_file()
+
+    for title in titles:
+        title_idx = titles.index(title)
+
+        movie_title = title
+        movie_year = years[title_idx]
+
+        movie_id = str(tmdb.Search().movie(query=movie_title, year=movie_year))
+        if movie_id.count("id") == 0 or movie_id.count("title") == 0:
+            continue
+        movie_id = movie_id.split("'id': ")[1]
+        movie_id = movie_id.split(", 'title'")[0]
+
+        new_movie = add_movie_if_new(movie_id, movie_title, movie_year, ratings[title_idx])
+
+        if new_movie is not None:
+            movies.append(new_movie)
+
+
+    all_keywords = []
+    all_keyword_weights = []
+
+    keywords = []
+    keyword_weights = []
+
+    positivity_threshold = 3.0 # Any movie rated higher than this is 'good'; de-value keywords from lower-rated movies
+    weight_modifier = 1.0 # Lower = less bias, higher = bias towards favourite keywords
+
+    for movie in movies:
+        m = Movie.objects.filter(id=movie.id).first()
+        if m is not None:
+            new_keywords = m.keywords.all()
+
+            w = (float(m.user_rating) - positivity_threshold) * weight_modifier
+
+            for keyword in new_keywords:
+                if keyword not in all_keywords:
+                    all_keywords.append(keyword)
+                    all_keyword_weights.append(w)
+                else:
+                    all_keyword_weights[all_keywords.index(keyword)] += w
+
+    for keyword in all_keywords:
+        if all_keyword_weights[all_keywords.index(keyword)] > 0:
+            keywords.append(keyword)
+            keyword_weights.append(all_keyword_weights[all_keywords.index(keyword)])
+
+    num_keywords_to_search = 5
+    selected_keywords = []#selected_keyword = random.choices(keywords, weights=keyword_weights, k=num_keywords_to_search)
+
+    while len(selected_keywords) < num_keywords_to_search:
+        selected_keyword = random.choices(keywords, weights=keyword_weights, k=1)[0]
+        if selected_keyword not in selected_keywords:
+            selected_keywords.append(selected_keyword)
+
+    keywords_to_search = []
+    for keyword in selected_keywords:
+        keywords_to_search.append(str(keyword.id))
+
+
+    results = get_and_save_movies_matching_keywords(keywords_to_search)
+
+    num_results_to_pick = 10
+
+    results.sort(key=lambda x: x.match_strength, reverse=True)
+
+    results_to_show = []
+
+    for result in results:
+        if num_results_to_pick == 0:
+            break
+        if result not in movies and result not in results_to_show:
+            results_to_show.append(result)
+            num_results_to_pick -= 1
+
+
+    return TemplateResponse(request, "index.html", {
+        'movies': movies,
+        'keywords_to_search': selected_keywords,
+        'keywords': zip(keywords, keyword_weights),
+        'results' : results_to_show
+    })
+
 
 # Based on https://medium.com/@brahim_idbendriss/how-to-upload-and-store-a-file-using-htmx-in-a-django-project-9e82cf3bb4b8
-def index(request):
+def file_submission(request):
+    titles = [
+        "Upload your Letterboxd ratings",
+        "Star threshold"
+        "Keyword weight modifier"
+        "Number of keywords to search"
+        "Maximum number of recommendations"
+    ]
+    subtitles = [
+        "Not sure how? On Letterboxd, go to Settings > Data > Export Your Data, unzip the folder it produces, and upload 'ratings.csv' here.",
+        "Base recommendations on movies with this many stars or more. Default is 3.0"
+        "Raise this value to favour keywords from your highest-rated movies, lower it to give all keywords a fairer chance. Default = 1.0"
+        "More keywords generates stronger and more varied recommendations, but has a large impact on loading time. Default = 5"
+        "Recommend this many movies (or fewer, if not enough are found.) Default = 10"
+    ]
     if request.method == 'POST':
         form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
             # Make sure new file is valid
             uploaded_file = form.cleaned_data['upload_your_letterboxd_ratings']
-            if uploaded_file.content_type != 'text/csv':
-                return render(request, 'index.html',{
-                    'form': form,
-                    'header': 'Uploaded file must be .csv'
-                })
+            if uploaded_file.content_type != 'text/csv': # check formatting?
+                return render(request, 'file_submission.html',{'form': form, 'error_message': 'Uploaded file must be .csv'})
 
             # Delete old uploaded files
             upload_dir = os.path.join(MEDIA_ROOT, 'uploads')
@@ -42,92 +141,11 @@ def index(request):
                 for chunk in uploaded_file.chunks():
                     destination.write(chunk)
 
-            movies = []
-
-            titles, years, ratings = get_data_from_submitted_file()
-
-            for title in titles:
-                title_idx = titles.index(title)
-
-                movie_title = title
-                movie_year = years[title_idx]
-
-                movie_id = str(tmdb.Search().movie(query=movie_title, year=movie_year))
-                if movie_id.count("id") == 0 or movie_id.count("title") == 0:
-                    continue
-                movie_id = movie_id.split("'id': ")[1]
-                movie_id = movie_id.split(", 'title'")[0]
-
-                new_movie = add_movie_if_new(movie_id, movie_title, movie_year, ratings[title_idx])
-
-                if new_movie is not None:
-                    movies.append(new_movie)
-
-            all_keywords = []
-            all_keyword_weights = []
-
-            keywords = []
-            keyword_weights = []
-
-            positivity_threshold = form.cleaned_data['star_threshold']  # Any movie rated higher than this is 'good'; de-value keywords from lower-rated movies
-            weight_modifier = form.cleaned_data['keyword_weight_modifier']  # Lower = less bias, higher = bias towards favourite keywords
-
-            for movie in movies:
-                m = Movie.objects.filter(id=movie.id).first()
-                if m is not None:
-                    new_keywords = m.keywords.all()
-
-                    w = (float(m.user_rating) - positivity_threshold) * weight_modifier
-
-                    for keyword in new_keywords:
-                        if keyword not in all_keywords:
-                            all_keywords.append(keyword)
-                            all_keyword_weights.append(w)
-                        else:
-                            all_keyword_weights[all_keywords.index(keyword)] += w
-
-            for keyword in all_keywords:
-                if all_keyword_weights[all_keywords.index(keyword)] > 0:
-                    keywords.append(keyword)
-                    keyword_weights.append(all_keyword_weights[all_keywords.index(keyword)])
-
-            num_keywords_to_search = form.cleaned_data['number_of_keywords_to_search']
-            selected_keywords = []  # selected_keyword = random.choices(keywords, weights=keyword_weights, k=num_keywords_to_search)
-
-            while len(selected_keywords) < num_keywords_to_search:
-                selected_keyword = random.choices(keywords, weights=keyword_weights, k=1)[0]
-                if selected_keyword not in selected_keywords:
-                    selected_keywords.append(selected_keyword)
-
-            keywords_to_search = []
-            for keyword in selected_keywords:
-                keywords_to_search.append(str(keyword.id))
-
-            results = get_and_save_movies_matching_keywords(keywords_to_search)
-
-            num_results_to_pick = form.cleaned_data['number_of_recommendations']
-
-            results.sort(key=lambda x: x.match_strength, reverse=True)
-
-            results_to_show = []
-
-            for result in results:
-                if num_results_to_pick == 0:
-                    break
-                if result not in movies and result not in results_to_show:
-                    results_to_show.append(result)
-                    num_results_to_pick -= 1
-
-            return TemplateResponse(request, 'index.html', {
-                'form': form,
-                'success_message': 'File uploaded successfully',
-                'movies': movies,
-                'keywords_to_search': selected_keywords,
-                'keywords': zip(keywords, keyword_weights),
-                'results': results_to_show,
-                'header': "Based on your Letterboxd ratings, you might be interested in movies related to..."
+            return render(request, 'file_submission.html', {
+                'form': zip(FileUploadForm(), titles, subtitles),
+                'success_message': 'File uploaded successfully'
             })
     else:
         form = FileUploadForm()
 
-    return TemplateResponse(request, "index.html", {'form': form, 'header': "Upload your Letterboxd ratings to get started!"})
+    return TemplateResponse(request, "file_submission.html", {'form': form})
