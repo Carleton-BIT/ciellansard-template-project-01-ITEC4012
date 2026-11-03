@@ -2,65 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Movie Recommender</title>
+<!--    {% load static %}-->
+<!--    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<!--    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.png' %}">-->
 </head>
 <body>
-    {% for keyword in keywords_to_search %}
-        <p>{{ keyword.id }}, {{ keyword.keyword_name }}</p>
-    {% endfor %}
-    <hr>
-    <hr>
-    <hr>
-<!--    {% for movie in movies %}-->
-<!--        <p>Title (Year): {{ movie.title }} ({{ movie.year }})</p>-->
-<!--        <p>ID: {{ movie.id }}</p>-->
-<!--        <p>Keywords:-->
-<!--            {% for keyword in movie.keywords.all %}-->
-<!--                [{{ keyword.id }} | {{ keyword.keyword_name }}]-->
-<!--            {% endfor %}-->
-<!--        </p>-->
-<!--        &lt;!&ndash;    <p>Genres: {{ movie.genres }}</p>&ndash;&gt;-->
-<!--        <p>Audience rating: {{ movie.audience_rating }}/10 ({{ movie.votes }} votes)</p>-->
-<!--        <p>Your rating: {{ movie.user_rating }}/5</p>-->
-<!--        <p>Length: {{ movie.length }} min.</p>-->
-<!--        <p>Link: <a href="{{ movie.tmdb_link }}">{{ movie.tmdb_link }}</a></p>-->
-<!--        <img src="https://image.tmdb.org/t/p/w1280/{{ movie.poster_path }}" style="height: 200px;">-->
-<!--        &lt;!&ndash;    <p>Info: {{ info }}</p>&ndash;&gt;-->
-<!--        <hr>-->
-<!--    {% endfor %}-->
+    <div id="sideBar">
+        <form method="post" enctype="multipart/form-data" hx-post="{% url 'index' %}" >
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit" id="submitButton">Get Recommendations</button>
+        </form>
+    </div>
+    <div id="recommendationsPanel">
+
+        <h1>{{ header }}</h1>
+
+        {% for keyword in keywords_to_search %}
+            <a href="https://www.themoviedb.org/keyword/{{ keyword.id }}-{{ keyword.keyword_name }}/movie">
+                <span class="keyword">{{ keyword.keyword_name|title }}</span>
+            </a>
+        {% endfor %}
 
         {% for result in results %}
-        <p>Title (Year): {{ result.title }} ({{ result.year }})</p>
-        <p>ID: {{ result.id }}</p>
-        <p>Keywords:
-            {% for keyword in result.keywords.all %}
-                [{{ keyword.id }} | {{ keyword.keyword_name }}]
-            {% endfor %}
-        </p>
-        <!--    <p>Genres: {{ movie.genres }}</p>-->
-        <p>Audience rating: {{ result.audience_rating }}/10 ({{ result.votes }} votes)</p>
-        <p>Match weight: {{ result.match_strength }}/5</p>
-        <p>Length: {{ result.length }} min.</p>
-        <p>Link: <a href="{{ result.tmdb_link }}">{{ result.tmdb_link }}</a></p>
-        <img src="https://image.tmdb.org/t/p/w1280/{{ result.poster_path }}" style="height: 200px;">
-        <!--    <p>Info: {{ info }}</p>-->
-        <hr>
-    {% endfor %}
-
-
-
-
-
-
-<!--{% for result in results %}-->
-<!--    <p>{{ result }}</p>-->
-<!--    <hr>-->
-<!--{% endfor %}-->
-
-    <hr>
-<hr>
-<!--    {% for keyword in keywords %}-->
-<!--        <p>{{ keyword.0.id }}, {{ keyword.0.keyword_name }} | {{ keyword.1 }}</p>-->
-<!--    {% endfor %}-->
+            {% include "recommendation.html" %}
+        {% endfor %}
+    </div>
 </body>
 </html>
