@@ -1,3 +1,5 @@
+import csv
+
 from django.contrib.sites import requests
 from django.shortcuts import render
 
@@ -139,9 +141,11 @@ def file_submission(request):
             # file_path = os.path.join("../media/uploads", str(uploaded_file.name))
 
             with open("../media/uploads", str(uploaded_file.name)) as csv_file:
-                for chunk in uploaded_file.chunks():
-                    print()
-                    #csv_file.write(chunk)
+                csv_writer = csv.writer(csv_file, delimiter=',',
+                                             quotechar='"',
+                                             quoting=csv.QUOTE_MINIMAL)
+                for row in csv_file:
+                    csv_writer.writerow(row)
 
             return render(request, 'file_submission.html', {
                 'form': zip(FileUploadForm(), titles, subtitles),
