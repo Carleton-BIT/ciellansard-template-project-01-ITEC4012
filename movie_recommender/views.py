@@ -134,13 +134,13 @@ def file_submission(request):
             # for file in os.listdir(upload_dir):
             #     os.remove(os.path.join(upload_dir, file))
             #
-            # # Save new file to uploads directory
-            # os.makedirs(upload_dir, exist_ok=True)
-            # file_path = os.path.join(upload_dir, str(uploaded_file.name))
-            # with open(file_path, 'wb+') as destination:
-            #     for chunk in uploaded_file.chunks():
-            #         destination.write(chunk)
-            #
+            # Save new file to uploads directory
+            #os.makedirs("../media/uploads", exist_ok=True)
+            file_path = os.path.join("../media/uploads", str(uploaded_file.name))
+            with open(file_path, 'wb+') as destination:
+                for chunk in uploaded_file.chunks():
+                    destination.write(chunk)
+
             return render(request, 'file_submission.html', {
                 'form': zip(FileUploadForm(), titles, subtitles),
                 'success_message': 'File uploaded successfully'
