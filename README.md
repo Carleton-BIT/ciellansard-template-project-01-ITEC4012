@@ -9,13 +9,7 @@ _Video taken of the app in action (locally)._
 ## Setup to run locally
 1. Clone the repository and open it in Pycharm
 2. Add a new Python 3.14 interpreter of type 'Virtualenv', if one is not already set up.
-3. Open a terminal in Pycharm and paste in the following commands: 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env
-```
+3. Open a terminal in Pycharm and run `pip install -r requirements.txt`
 4. If you do not have a TMDB account or TMDB API key/Bearer token, [create an account and request API access]([url](https://www.themoviedb.org/settings/api/request)) for personal use: https://www.themoviedb.org/settings/api/request
 5. Find your API key at the bottom of [this page.]([url](https://www.themoviedb.org/settings/api)): https://www.themoviedb.org/settings/api
 6. Find your bearer token by going to https://developer.themoviedb.org/reference/account-details and, on the right side, click `CREDENTIALS > Header` and hit the lock icon to reveal the token.
@@ -54,6 +48,7 @@ python manage.py makemigrations
 python manage.py migrate
 python manage.py collectstatic
 ```
+8. Add a directory named ``/media/uploads``
 9. Start the server using `python manage.py runserver`, then access it at http://localhost:8000.
 10. You will need to give the site a .csv file containing a Letterboxd user's movie ratings. If you have a Letterboxd account find this by going to `Settings > Data > Export Your Data`, unzipping the folder it produces, and looking for the 'ratings.csv' file. If not, feel free to use this sample [ratings.csv](https://github.com/user-attachments/files/34306987/ratings.csv). 
 
